@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <ctime>
 
 const std::string test_file_path {"../data/track.txt"}; // default test file path
 const std::string log_file_path {"log.txt"}; //default log file
@@ -14,6 +15,7 @@ struct card_data
     std::string card_data_line;
     int yy;                        // year
     int mm;                        // month
+    bool date_valid;
     ver_method verification;
 };
 
@@ -60,11 +62,21 @@ void load_file(std::vector<card_data> & buff, std::ofstream & log_file, const st
 
 void check_dates(std::vector<card_data> & buff, std::ofstream & log_file)
 {
+    time_t now = time(NULL);
+    tm *local_time = std::localtime(&now);
+    std::cout <<local_time->tm_year <<std::endl;
     for(auto & b: buff)
     {
         b.yy = std::stoi(b.card_data_line.substr(0,2));
         b.mm = std::stoi(b.card_data_line.substr(2,2));
-        log_file <<b.card_number <<"\tYEAR: " <<b.yy <<"\t MONTH: " <<b.mm <<std::endl;
-        std::cout <<b.card_number <<"\tYEAR: " <<b.yy <<"\t MONTH: " <<b.mm <<std::endl;
+        if(b.yy > (local_time->tm_year % 100))
+            b.date_valid = true;
+        else if(b.yy == (local_time->tm_year % 100) && b.mm >= 1 + local_time->tm_mon)
+            b.date_valid = true;
+        else
+            b.date_valid = false;
+
+        log_file <<b.card_number <<"\tYEAR: " <<b.yy <<"\t MONTH: " <<b.mm <<"\tDATE VALID: " <<b.date_valid <<std::endl;
+        std::cout <<b.card_number <<"\tYEAR: " <<b.yy <<"\t MONTH: " <<b.mm <<"\tDATE VALID: " <<b.date_valid <<std::endl;
     }
 }
