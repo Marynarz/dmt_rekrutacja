@@ -1,0 +1,65 @@
+Try to validate track2
+	LOAD_FILE
+Trying to load file from path:	../data/track.txt
+test file is opened
+adding line to vector: ;5575110018970641=21112260000094100000?
+adding line to vector: ;4874741186953224=20052261257056313563?
+adding line to vector: ;4168960335927203=210912115258575?
+adding line to vector: ;6763781001004208=2001226778?
+adding line to vector: ;4056727672167188=13052261369611500000?
+	Veryfin date
+5575110018970641	YEAR: 21	 MONTH: 11	DATE VALID: 1
+4874741186953224	YEAR: 20	 MONTH: 5	DATE VALID: 0
+4168960335927203	YEAR: 21	 MONTH: 9	DATE VALID: 1
+6763781001004208	YEAR: 20	 MONTH: 1	DATE VALID: 0
+4056727672167188	YEAR: 13	 MONTH: 5	DATE VALID: 0
+	Card number validation
+Card: 5575110018970641 is: 1
+Card: 4874741186953224 is: 1
+Card: 4168960335927203 is: 1
+Card: 6763781001004208 is: 0
+Card: 4056727672167188 is: 1
+
+	FINAL:
+Card: 		5575110018970641
+Number isvalid:	1
+Track2 data:	21112260000094100000?
+Date mm/yy: 	11/21
+Date is valid:	1
+
+---
+
+Card: 		4874741186953224
+Number isvalid:	1
+Track2 data:	20052261257056313563?
+Date mm/yy: 	5/20
+Date is valid:	0
+
+---
+
+Card: 		4168960335927203
+Number isvalid:	1
+Track2 data:	210912115258575?
+Date mm/yy: 	9/21
+Date is valid:	1
+
+---
+
+Card: 		6763781001004208
+Number isvalid:	0
+Track2 data:	2001226778?
+Date mm/yy: 	1/20
+Date is valid:	0
+
+---
+
+Card: 		4056727672167188
+Number isvalid:	1
+Track2 data:	13052261369611500000?
+Date mm/yy: 	5/13
+Date is valid:	0
+
+---
+
+
+Bye!
