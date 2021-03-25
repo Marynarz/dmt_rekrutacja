@@ -6,7 +6,7 @@
 #include <regex>
 
 const std::string test_file_path {"../data/track.txt"}; // default test file path
-const std::string log_file_path {"log.txt"}; //default log file
+const std::string log_file_path {"../log_zad1.txt"}; //default log file
 
 struct card_data
 {

@@ -6,7 +6,7 @@
 #include <map>
 
 const std::string test_file_path {"../data/acc.txt"}; // default test file path
-const std::string log_file_path {"log.txt"}; //default log file
+const std::string log_file_path {"../log_zad3.txt"}; //default log file
 
 bool is_valid(const std::string & acc_number, std::ofstream & log_file);
 void load_file(std::vector<std::string> & buff, std::ofstream & log_file, const std::string path = test_file_path);
