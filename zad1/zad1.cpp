@@ -105,8 +105,8 @@ void card_number_validation(std::vector<card_data> & buff, std::ofstream & log_f
         log_file <<"Card: " <<b.card_number <<" is: " <<b.number_valid <<std::endl;
         std::cout <<"Card: " <<b.card_number <<" is: " <<b.number_valid <<std::endl;
         bool luhn_valid = control_sum_luhn(b.card_number, log_file);
-        if(b.number_valid != luhn_valid)
-            b.number_valid = luhn_valid
+        if(b.number_valid && !luhn_valid)
+            b.number_valid = luhn_valid;
 
         std::cout <<"After LUHN algorithm: " <<b.number_valid <<std::endl;
         log_file <<"After LUHN algorithm: " <<b.number_valid <<std::endl;
@@ -154,7 +154,7 @@ bool control_sum_luhn(const std::string & test_str, std::ofstream & log_file)
     log_file <<std::endl;
 
     // multiplying every second digit by 2. If multiplyin is greater than 9 sum both digits: 18 = 1+8 = 9 etc.
-    for(int i = 1; i <numb_size; i += 2)
+    for(int i = 0; i <numb_size; i += 2)
     {
         test_numbers[i] *= 2;
         if(test_numbers [i] > 9)
