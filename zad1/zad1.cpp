@@ -22,6 +22,7 @@ void load_file(std::vector<card_data> & buff, std::ofstream & log_file, const st
 void check_dates(std::vector<card_data> & buff, std::ofstream & log_file);
 void card_number_validation(std::vector<card_data> & buff, std::ofstream & log_file);
 void show_card_data(const std::vector<card_data> & buff, std::ofstream & log_file);
+bool control_sum_luhn(const std::string & test_str, std::ofstream & log_file);
 
 int main()
 {
@@ -103,6 +104,12 @@ void card_number_validation(std::vector<card_data> & buff, std::ofstream & log_f
         b.number_valid = std::regex_match(b.card_number, re);
         log_file <<"Card: " <<b.card_number <<" is: " <<b.number_valid <<std::endl;
         std::cout <<"Card: " <<b.card_number <<" is: " <<b.number_valid <<std::endl;
+        bool luhn_valid = control_sum_luhn(b.card_number, log_file);
+        if(b.number_valid != luhn_valid)
+            b.number_valid = luhn_valid
+
+        std::cout <<"After LUHN algorithm: " <<b.number_valid <<std::endl;
+        log_file <<"After LUHN algorithm: " <<b.number_valid <<std::endl;
     }
 }
 
@@ -127,4 +134,44 @@ void show_card_data(const std::vector<card_data> & buff, std::ofstream & log_fil
         log_file <<"Date is valid:\t" <<b.date_valid <<std::endl; 
         log_file <<"\n---\n\n";
     }
+}
+
+bool control_sum_luhn(const std::string & test_str, std::ofstream & log_file)
+{
+    size_t numb_size = test_str.size();
+    int * test_numbers = new int[numb_size];
+    
+    std::cout <<"Test number: " <<test_str <<"\nConvert to int[]: ";
+    log_file <<"Test number: " <<test_str <<"\nConvert to int[]: ";
+    // char to int
+    for(int i = 0; i < numb_size; ++i)
+    {
+        test_numbers[i] = test_str[i] - '0';
+        std::cout <<test_numbers[i];
+        log_file <<test_numbers[i];
+    }
+    std::cout <<std::endl;
+    log_file <<std::endl;
+
+    // multiplying every second digit by 2. If multiplyin is greater than 9 sum both digits: 18 = 1+8 = 9 etc.
+    for(int i = 1; i <numb_size; i += 2)
+    {
+        test_numbers[i] *= 2;
+        if(test_numbers [i] > 9)
+            test_numbers[i] = test_numbers[i] % 10 + test_numbers[i] / 10;
+        std::cout <<"Doubled digit:\t" <<test_numbers[i] <<" for position:\t" <<i <<std::endl;
+        log_file <<"Doubled digit:\t" <<test_numbers[i] <<" for position:\t" <<i <<std::endl;
+    }
+
+    int sum = 0;
+    for(int i = 0; i<numb_size; ++i)
+    {
+        sum += test_numbers[i];
+        std::cout <<"Suma: " <<sum <<std::endl;
+        log_file <<"Suma: " <<sum <<std::endl;
+    }    
+    std::cout <<"Suma ostateczna: " <<sum <<" modulo10: " <<sum % 10 <<std::endl;
+    log_file <<"Suma ostateczna: " <<sum <<" modulo10: " <<sum % 10 <<std::endl;
+    delete [] test_numbers;
+    return sum % 10 == 0;
 }
