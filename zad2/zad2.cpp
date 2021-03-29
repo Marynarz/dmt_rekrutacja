@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <map>
 
 const std::string range_file_path {"../data/rang.txt"};  //default rang file path
 const std::string test_file_path {"../data/track.txt"}; // default test file path
@@ -34,6 +35,7 @@ int main()
     // vector with cardnumbers and ranges
     std::vector<std::string> cards_nums;
     std::vector<Range> ranges;
+    std::map<std::string, std::string> ret;
     
     // Magic
     load_card_numbers(cards_nums, log_file);
@@ -47,9 +49,18 @@ int main()
             {
                 std::cout <<"Card name:\t" <<rng.get_card_name() <<std::endl;
                 log_file <<"Card name:\t" <<rng.get_card_name() <<std::endl;
+                ret[crd] = rng.get_card_name();
                 break;
             }
         }
+    }
+
+    std::cout <<"\n\tSUMMARY:\n";
+    log_file <<"\n\tSUMMARY:\n";
+    for(auto & rets: ret)
+    {
+        std::cout <<rets.first <<" card name:\t" <<rets.second <<std::endl;
+        log_file <<rets.first <<" card name:\t" <<rets.second <<std::endl;
     }
 
     std::cout <<"\nBye!\n";
@@ -120,26 +131,25 @@ Range::Range(const std::string & line, std::ofstream * lg_file)
     *log_file <<"Creating object from line: " <<line <<std::endl;
     size_t first_sep = line.find('|');
     size_t sec_sep = line.find('|', first_sep + 1);
-    range_min = line.substr(0, first_sep - 1);
-    range_max = line.substr(first_sep + 1, sec_sep -1);
+    range_min = line.substr(0, first_sep);
+    range_max = line.substr(first_sep + 1, first_sep);
     card_name = line.substr(sec_sep + 1);
+    std::cout <<first_sep <<" " <<sec_sep <<std::endl;
     *log_file <<"range max:\t" <<range_max <<"\nrange min:\t" <<range_min <<"\ncard name:\t" <<card_name <<std::endl;
 }
 
 bool Range::is_in_range(const std::string & test_str)
 {
-    *log_file <<"\n\tIS_IN_RANGE\nchecking: " <<test_str <<std::endl;
-    for(int letter = 0; letter < range_min.size(); letter++)
-    {
-        if(range_min[letter] >= test_str[letter] && range_max[letter] <= test_str[letter] )
-        {
-            *log_file <<"Digit: '" <<test_str[letter] <<"' is NOT in range" <<std::endl;
-            return false;
-        }
-        *log_file <<"Digit: '" <<test_str[letter] <<"' is in range " <<range_min[letter] <<" max: " <<range_max[letter] <<std::endl;
-    }
-    *log_file <<"All line is in range\n";
-    return true;
+    *log_file <<"\n\tIS_IN_RANGE: " <<card_name <<"\nchecking: " <<test_str <<std::endl;
+    std::string test = test_str.substr(0, range_min.size());
+    std::cout <<range_min <<" <= " <<test <<" ? " << (range_min <= test) <<std::endl;
+    std::cout <<range_max <<" >= " <<test <<" ? " << (range_max >= test) <<std::endl;
+    *log_file <<range_min <<" <= " <<test <<" ? " << (range_min <= test) <<std::endl;
+    *log_file <<range_max <<" >= " <<test <<" ? " << (range_max >= test) <<std::endl;
+    
+    bool range = (range_min <= test) && (range_max >= test);
+    *log_file <<"Is in range: " <<range <<std::endl;
+    return range;
 }
 
 std::string Range::get_card_name()
